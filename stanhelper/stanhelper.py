@@ -12,6 +12,14 @@ import pandas as pd
 from operator import mul
 import linecache
 
+from pystan._compat import PY2, string_types
+import re
+from numbers import Number
+if PY2:
+    from collections import Sequence
+else:
+    from collections.abc import Sequence
+
 def stan_read_csv(fname):
     """Reads and parses the output file (csv) from cmdStan.
 
