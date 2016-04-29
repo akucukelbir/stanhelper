@@ -7,6 +7,11 @@ This module implements functions that help interface with cmdStan.
 
 """
 
+import numpy as np
+import pandas as pd
+from operator import mul
+import linecache
+
 def stan_read_csv(fname):
     """Reads and parses the output file (csv) from cmdStan.
 
