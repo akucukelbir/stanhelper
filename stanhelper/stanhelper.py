@@ -16,9 +16,9 @@ from pystan._compat import PY2, string_types
 import re
 from numbers import Number
 if PY2:
-    from collections import Sequence
+    from collections import OrderedDict, Sequence
 else:
-    from collections.abc import Sequence
+    from collections.abc import OrderedDict, Sequence
 
 def stan_read_csv(fname):
     """Reads and parses the output file (csv) from cmdStan.
@@ -72,7 +72,7 @@ def stan_read_csv(fname):
     
     # read in csv file
     df = pd.read_csv(fname, comment='#')
-    del df['lp__']
+    
 
     if method == SAMPLE:
         if df.shape[0] < 1:
@@ -83,12 +83,13 @@ def stan_read_csv(fname):
             raise RuntimeError(fname + ' must contain exactly 1 row.')
             
     if method == VARIATIONAL:
+        del df['lp__']
         if df.shape[0] < 2:
             raise RuntimeError(fname + ' must contain at least 2 rows.')
     
     # get parameter names and dimensions
     column_names_split = df.columns.map(lambda x: x.split('.'))
-    par_names = dict()
+    par_names = OrderedDict()
     for entry in column_names_split:
         if len(entry[1:]) != 0:
             par_names[entry[0]] = entry[1:]
@@ -98,7 +99,7 @@ def stan_read_csv(fname):
     # get first line of parameters
     first_line = df.ix[0].values
     
-    first_line_pars = dict()
+    first_line_pars = OrderedDict()
     ofs = 0
     for par in par_names:
         shape = tuple(map(int, par_names[par]))
@@ -121,7 +122,7 @@ def stan_read_csv(fname):
         num_samples = df.shape[0]
     
     # get samples
-    sampled_pars = dict()
+    sampled_pars = OrderedDict()
     ofs = 0
     for par in par_names:
         shape_list = map(int, par_names[par])
