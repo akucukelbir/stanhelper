@@ -202,6 +202,30 @@ def _dict_to_rdump(data):
         parts.append(s)
     return ''.join(parts)
 
+def _rdump_value_to_numpy(s):
+    """
+    Convert a R dump formatted value to Numpy equivalent
+    For example, "c(1, 2)" becomes ``array([1, 2])``
+    Only supports a few R data structures. Will not work with European decimal format.
+    """
+    if "structure" in s:
+        vector_str, shape_str = re.findall(r'c\([^\)]+\)', s)
+        shape = [int(d) for d in shape_str[2:-1].split(',')]
+        if '.' in vector_str:
+            arr = np.array([float(v) for v in vector_str[2:-1].split(',')])
+        else:
+            arr = np.array([int(v) for v in vector_str[2:-1].split(',')])
+        # 'F' = Fortran, column-major
+        arr = arr.reshape(shape, order='F')
+    elif "c(" in s:
+        if '.' in s:
+            arr = np.array([float(v) for v in s[2:-1].split(',')], order='F')
+        else:
+            arr = np.array([int(v) for v in s[2:-1].split(',')], order='F')
+    else:
+        arr = np.array(float(s) if '.' in s else int(s))
+    return arr
+
 def stan_rdump(data, filename):
     """
     Dump a dictionary with model data into a file using the R dump format that
@@ -218,3 +242,23 @@ def stan_rdump(data, filename):
             raise ValueError("Variable name {} is not allowed in Stan".format(name))
     with open(filename, 'w') as f:
         f.write(_dict_to_rdump(data))
+
+def read_rdump(filename):
+    """
+    Read data formatted using the R dump format
+    Parameters
+    ----------
+    filename: str
+    Returns
+    -------
+    data : OrderedDict
+    """
+    contents = open(filename).read().strip()
+    names = [name.strip() for name in re.findall(r'^(\w+) <-', contents, re.MULTILINE)]
+    values = [value.strip() for value in re.split('\w+ +<-', contents) if value]
+    if len(values) != len(names):
+        raise ValueError("Unable to read file. Unable to pair variable name with value.")
+    d = OrderedDict()
+    for name, value in zip(names, values):
+        d[name.strip()] = _rdump_value_to_numpy(value.strip())
+    return d
