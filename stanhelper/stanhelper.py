@@ -15,12 +15,13 @@ import linecache
 import sys
 import re
 from numbers import Number
+from collections import OrderedDict
+string_types = (str,)
 if sys.version_info[0] == 2:
-    from collections import OrderedDict, Sequence
-    string_types = (str,)
+    from collections import Sequence
 else:
-    from collections.abc import OrderedDict, Sequence
-    string_types = (str, unicode)
+    from collections.abc import Sequence
+
 
 def stan_read_csv(fname):
     """Reads and parses the output file (csv) from cmdStan.
@@ -28,53 +29,53 @@ def stan_read_csv(fname):
     Alp Kucukelbir (2016)
 
     Args:
-        fname (str): the file name. 
+        fname (str): the file name.
 
     Returns:
         dict: a dictionary with reshaped parameter estimates and samples.
-        
-            If Stan `method = sampling`, then dict contains keys that match 
-            the parameter names. For each parameter, its posterior samples 
+
+            If Stan `method = sampling`, then dict contains keys that match
+            the parameter names. For each parameter, its posterior samples
             are reshaped as `(num_samples, dim 1, dim 2, ...)`.
-            
+
             If Stan `method = optimize`, then dict contains keys that match
             the parameter names. For each parameter, its posterior mode
             is reshaped as `(dim 1, dim 2, ...)`.
-            
+
             If Stan `method = variational`, then dict contains two dictionaries.
                 dict['sampled_pars'] contains the samples drawn from the
                 approximate posterior; it has the same structure as the
                 `sampling` output.
-            
-                dict['mean_pars'] contains the means of the approximate 
+
+                dict['mean_pars'] contains the means of the approximate
                 posterior; it has the same structure as the `optimize` output.
 
     Raises:
         RuntimeError: If the file does not contain a valid method field in
             its header (the comments in the csv file).
         RuntimeError: If the file does not have the correct number of rows.
-        
+
     """
-        
+
     # figure out which Stan method was used to generate csv file
     linecache.clearcache()
     method_line = linecache.getline(fname, 5)
     SAMPLE = 0
     OPTIMIZE = 1
     VARIATIONAL = 2
-    
+
     if method_line.find('sample') != -1:
         method = SAMPLE
-    elif method_line.find('optimize') != -1: 
+    elif method_line.find('optimize') != -1:
         method = OPTIMIZE
     elif method_line.find('variational') != -1:
         method = VARIATIONAL
     else:
         raise RuntimeError(fname +' does not have a valid method field.')
-    
+
     # read in csv file
     df = pd.read_csv(fname, comment='#')
-    
+
 
     if method == SAMPLE:
         if df.shape[0] < 1:
@@ -83,12 +84,12 @@ def stan_read_csv(fname):
     if method == OPTIMIZE:
         if df.shape[0] != 1:
             raise RuntimeError(fname + ' must contain exactly 1 row.')
-            
+
     if method == VARIATIONAL:
         del df['lp__']
         if df.shape[0] < 2:
             raise RuntimeError(fname + ' must contain at least 2 rows.')
-    
+
     # get parameter names and dimensions
     column_names_split = df.columns.map(lambda x: x.split('.'))
     par_names = OrderedDict()
@@ -97,32 +98,32 @@ def stan_read_csv(fname):
             par_names[entry[0]] = entry[1:]
         else:
             par_names[entry[0]] = [1]
-            
+
     # get first line of parameters
     first_line = df.ix[0].values
-    
+
     first_line_pars = OrderedDict()
     ofs = 0
     for par in par_names:
         shape = tuple(map(int, par_names[par]))
         jump_ahead = reduce(mul,shape)
         if len(shape) != 1:
-            first_line_pars[par] = np.reshape(first_line[ofs:ofs+jump_ahead], 
+            first_line_pars[par] = np.reshape(first_line[ofs:ofs+jump_ahead],
                                               shape, order='F')
         else:
             first_line_pars[par] = first_line[ofs:ofs+jump_ahead]
         ofs = ofs + jump_ahead
-    
+
     # RETURN OPTIMIZE: the first line contains the MAP estimates.
     if method == OPTIMIZE:
         return first_line_pars
-    
+
     # get number of samples
     if method == VARIATIONAL:
         num_samples = df.shape[0]-1
     if method == SAMPLE:
         num_samples = df.shape[0]
-    
+
     # get samples
     sampled_pars = OrderedDict()
     ofs = 0
@@ -133,19 +134,19 @@ def stan_read_csv(fname):
         shape = tuple(shape_list)
         if len(shape) != 2:
             sampled_pars[par] = np.reshape(
-                                df.tail(num_samples).values[:,ofs:ofs+jump_ahead], 
+                                df.tail(num_samples).values[:,ofs:ofs+jump_ahead],
                                 shape, order='F')
         else:
             sampled_pars[par] = df.tail(num_samples).values[:,ofs:ofs+jump_ahead]
         ofs = ofs + jump_ahead
-    
+
     result = dict()
     # RETURN VARIATIONAL: the first line contains the posterior mean estimates.
     if method == VARIATIONAL:
         result['mean_pars'] = first_line_pars
         result['sampled_pars'] = sampled_pars
         return result
-    
+
     # RETURN SAMPLE
     if method == SAMPLE:
         result = sampled_pars
