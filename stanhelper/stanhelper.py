@@ -21,6 +21,11 @@ if sys.version_info[0] == 2:
     from collections import Sequence
 else:
     from collections.abc import Sequence
+from functools import reduce
+
+import six
+if six.PY3:
+    from past.builtins import map
 
 
 def stan_read_csv(fname):
