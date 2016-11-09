@@ -21,6 +21,7 @@ if sys.version_info[0] == 2:
     from collections import Sequence
 else:
     from collections.abc import Sequence
+    from functools import reduce
 
 
 def stan_read_csv(fname):
