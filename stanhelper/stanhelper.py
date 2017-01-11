@@ -7,11 +7,12 @@ This module implements functions that help interface with cmdStan.
 
 """
 
+import six
+from functools import reduce
 import numpy as np
 import pandas as pd
 from operator import mul
 import linecache
-
 import sys
 import re
 from numbers import Number
@@ -21,11 +22,29 @@ if sys.version_info[0] == 2:
     from collections import Sequence
 else:
     from collections.abc import Sequence
-from functools import reduce
-
-import six
 if six.PY3:
     from past.builtins import map
+
+
+def get_mean_values(parameter_names, parsed_csv_dict):
+
+    sampling = False
+    if ('accept_stat__' in parsed_csv_dict):
+        sampling = True
+
+    mean_values = []
+    for parameter in parameter_names:
+        # ADVI
+        if ('mean_pars' in parsed_csv_dict):
+            mean_values.append(parsed_csv_dict['mean_pars'][parameter])
+        else:
+            value = parsed_csv_dict[parameter]
+            if sampling:
+                mean_values.append(np.mean(value, axis=0))
+            else:
+                mean_values.append(value)
+
+    return mean_values
 
 
 def stan_read_csv(fname):
