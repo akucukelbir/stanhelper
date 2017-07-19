@@ -14,7 +14,8 @@ datadict['tau'] = 25
 stanhelper.stan_rdump(datadict, 'input.data.R')
 
 # # Compile cmdStan program; do this however you're most comfortable
-# # subprocess.call("stanmake eight.stan", shell=True)
+# stanmake refers to a helper function for compiling stan models: https://gist.github.com/altosaar/7690801f4280ee04a1e4b92c85c40e7e
+# subprocess.call("stanmake eight.stan", shell=True)
 
 # Call cmdStan with whatever parameters you want;
 
@@ -31,7 +32,7 @@ stanhelper.stan_rdump(datadict, 'input.data.R')
 # HELPER FUNCTION 2: read results back in dictionary
 result = stanhelper.stan_read_csv('output.csv')
 
-mean_pars = stanhelper.get_mean_values(result)
+mean_pars = stanhelper.extract_mean_values(result)
 
 # Posterior mean estimates are in a dict `result['mean_pars']`
 print('mu: ',)
