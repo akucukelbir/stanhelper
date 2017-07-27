@@ -1,3 +1,8 @@
+stanhelper/how_to_use/eight
+stanhelper/how_to_use/eight.hpp
+stanhelper/how_to_use/input.data.R
+stanhelper/how_to_use/output.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
