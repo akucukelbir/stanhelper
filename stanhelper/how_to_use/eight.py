@@ -14,7 +14,8 @@ datadict['tau'] = 25
 stanhelper.stan_rdump(datadict, 'input.data.R')
 
 # # Compile cmdStan program; do this however you're most comfortable
-# stanmake refers to a helper function for compiling stan models: https://gist.github.com/altosaar/7690801f4280ee04a1e4b92c85c40e7e
+# stanmake refers to a helper function for compiling stan models:
+# https://gist.github.com/altosaar/7690801f4280ee04a1e4b92c85c40e7e
 # subprocess.call("stanmake eight.stan", shell=True)
 
 # Call cmdStan with whatever parameters you want;
