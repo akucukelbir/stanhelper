@@ -29,16 +29,19 @@ def extract_mean_values(stan_output):
   """
 
   mean_values = {}
-  for parameter in stan_output.keys():
-    # variational
-    if ('mean_pars' in stan_output):
+  # variational
+  if ('mean_pars' in stan_output):
+    for parameter in stan_output['mean_pars']:
       mean_values[parameter] = stan_output['mean_pars'][parameter]
-    # sampling
-    elif ('accept_stat__' in stan_output):
-      mean_values[parameter] = np.mean(stan_output[parameter], axis=0)
-    # optimize
-    else:
-     mean_values[parameter] = stan_output[parameter]
+  # sampling
+  elif ('accept_stat__' in stan_output):
+    for parameter in stan_output.keys():
+        mean_values[parameter] = np.mean(
+            stan_output[parameter], axis=0)
+  # optimize
+  else:
+    for parameter in stan_output.keys():
+      mean_values[parameter] = stan_output[parameter]
 
   return mean_values
 
@@ -211,7 +214,7 @@ def _dict_to_rdump(data):
   parts = []
   for name, value in data.items():
     if isinstance(value, (Sequence, Number, np.number,
-                  np.ndarray, int, bool, float)) \
+                          np.ndarray, int, bool, float)) \
        and not isinstance(value, str):
       value = np.asarray(value)
     else:
@@ -294,7 +297,7 @@ def read_rdump(filename):
   """
   contents = open(filename).read().strip()
   names = [name.strip() for name in re.findall(r'^(\w+) <-', contents,
-           re.MULTILINE)]
+                                               re.MULTILINE)]
   values = [value.strip() for value in re.split('\w+ +<-', contents) if value]
   if len(values) != len(names):
     raise ValueError("Unable to pair variable name with value.")
