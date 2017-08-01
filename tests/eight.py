@@ -1,7 +1,8 @@
-import stanhelper
-
 import numpy as np
 import subprocess
+
+from stanhelper import write_rdump, stan_read_csv, get_posterior_estimates
+
 
 # Define data
 datadict = {}
@@ -11,7 +12,7 @@ datadict['sigma'] = np.array([15, 10, 16, 11, 9, 11, 10, 18])
 datadict['tau'] = 25
 
 # HELPER FUNCTION 1: save data to disk in Rdump format
-stanhelper.stan_rdump(datadict, 'input.data.R')
+write_rdump(datadict, 'input.data.R')
 
 # # Compile cmdStan program; do this however you're most comfortable
 # stanmake refers to a helper function for compiling stan models:
@@ -31,9 +32,9 @@ stanhelper.stan_rdump(datadict, 'input.data.R')
 
 
 # HELPER FUNCTION 2: read results back in dictionary
-result = stanhelper.stan_read_csv('output.csv')
+result = stan_read_csv('output.csv')
 
-mean_pars = stanhelper.extract_mean_values(result)
+mean_pars = get_posterior_estimates(result)
 
 # Posterior mean estimates are in a dict `result['mean_pars']`
 print('mu: ',)
