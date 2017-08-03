@@ -1,0 +1,32 @@
+# stan_version_major = 2
+# stan_version_minor = 15
+# stan_version_patch = 0
+# model = eight_model
+# method = MISSING
+#   variational
+#     algorithm = meanfield (Default)
+#       meanfield
+#     iter = 10000 (Default)
+#     grad_samples = 1 (Default)
+#     elbo_samples = 100 (Default)
+#     eta = 1 (Default)
+#     adapt
+#       engaged = 1 (Default)
+#       iter = 50 (Default)
+#     tol_rel_obj = 0.01 (Default)
+#     eval_elbo = 100 (Default)
+#     output_samples = 1000 (Default)
+# id = 0 (Default)
+# data
+#   file = TMP
+# init = 2 (Default)
+# random
+#   seed = 2965595225
+# output
+#   file = output.csv (Default)
+#   diagnostic_file =  (Default)
+#   refresh = 100 (Default)
+lp__,mu,theta.1,theta.2,theta.3,theta.4,theta.5,theta.6,theta.7,theta.8,tau
+# Stepsize adaptation complete.
+# eta = 1
+0,1.84578,4.64194,2.73732,-0.0879071,2.4676,-0.00791389,1.06119,5.76268,1.77541,9.59118

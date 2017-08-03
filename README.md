@@ -1,4 +1,6 @@
-__stanhelper__ is a module that implements functions that help interface with 
+# Stanhelper
+
+Stanhelper is a module that implements functions that help interface with
 [cmdStan](http://mc-stan.org).
 
 ## Installation
@@ -6,4 +8,12 @@ __stanhelper__ is a module that implements functions that help interface with
 To install from pip, run
 ```{bash}
 pip install stanhelper
+```
+
+## Testing
+
+Make sure you compile the Stan files under `tests` first. Then run
+```{bash}
+pytest tests
+pytest --pep8
 ```

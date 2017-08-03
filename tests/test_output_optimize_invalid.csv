@@ -1,0 +1,30 @@
+# stan_version_major = 2
+# stan_version_minor = 15
+# stan_version_patch = 0
+# model = eight_model
+# method = optimize
+#   optimize
+#     algorithm = lbfgs (Default)
+#       lbfgs
+#         init_alpha = 0.001 (Default)
+#         tol_obj = 9.9999999999999998e-13 (Default)
+#         tol_rel_obj = 10000 (Default)
+#         tol_grad = 1e-08 (Default)
+#         tol_rel_grad = 10000000 (Default)
+#         tol_param = 1e-08 (Default)
+#         history_size = 5 (Default)
+#     iter = 2000 (Default)
+#     save_iterations = 0 (Default)
+# id = 0 (Default)
+# data
+#   file = TMP
+# init = 2 (Default)
+# random
+#   seed = 2965564205
+# output
+#   file = output.csv (Default)
+#   diagnostic_file =  (Default)
+#   refresh = 100 (Default)
+lp__,mu,theta.1,theta.2,theta.3,theta.4,theta.5,theta.6,theta.7,theta.8,tau
+276.575,0.765896,0.765896,0.765896,0.765896,0.765896,0.765896,0.765896,0.765896,0.765896,4.33587e-16
+276.575,0.765896,0.765896,0.765896,0.765896,0.765896,0.765896,0.765896,0.765896,0.765896,4.33587e-16

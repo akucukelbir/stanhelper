@@ -1,5 +1,5 @@
-import numpy as np
 import os
+import numpy as np
 
 from unittest import TestCase
 from stanhelper import write_rdump, read_rdump
