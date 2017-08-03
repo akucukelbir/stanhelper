@@ -1,9 +1,71 @@
 import re
 import linecache
+import os
+import mimetypes
+import subprocess
 import numpy as np
 import pandas as pd
 from functools import reduce
 from operator import mul
+from tempfile import NamedTemporaryFile
+
+
+def run(stan_binary_path: str,
+        input_data: dict,
+        method: str,
+        method_params: str='',
+        output_params: str=''
+        ) -> dict:
+
+    # check method
+    if method not in ['sample', 'optimize', 'variational']:
+        raise RuntimeError(f'{method} must be either sample, optimize, '
+                           'or variational.')
+
+    # check that stan_binary_path is an executable
+    if os.path.isfile(stan_binary_path):
+        mimetype = str(subprocess.check_output(
+            ['file', '-b', '--mime-type', stan_binary_path]).strip(), 'utf-8')
+
+        if mimetype not in ['application/x-executable',
+                            'application/x-mach-binary']:
+            raise RuntimeError(f'{stan_binary_path} is not an executable.')
+    else:
+        raise RuntimeError(f'{stan_binary_path} is not a valid file.')
+
+    # save input data to a temporary Rdump file
+    input_data_rdump_file = NamedTemporaryFile()
+    write_rdump(input_data, input_data_rdump_file.name)
+
+    # create temporary output file
+    output_stan_csv_file = NamedTemporaryFile()
+
+    # append space to method_params, if defined
+    if method_params != '':
+        method_params += ' '
+
+    exec_str = (f'{stan_binary_path}'
+                ' '
+                f'{method}'
+                ' '
+                f'{method_params}'
+                f'data file={input_data_rdump_file.name}'
+                ' '
+                f'output file={output_stan_csv_file.name}'
+                ' '
+                f'{output_params}')
+
+    try:
+        stan_stdout = subprocess.check_output(exec_str,
+                                              shell=True,
+                                              stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        return {'error': e.output}
+    else:
+        return {
+            'stdout': stan_stdout,
+            'output': stan_read_csv(output_stan_csv_file.name)
+        }
 
 
 def get_posterior_estimates(stan_output: dict) -> dict:
