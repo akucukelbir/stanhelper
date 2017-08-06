@@ -1,7 +1,6 @@
 # Stanhelper
 
-Stanhelper is a module that implements functions that help interface with
-[cmdStan](http://mc-stan.org).
+Stanhelper is a lightweight wrapper around [cmdStan](http://mc-stan.org).
 
 ## Installation
 
