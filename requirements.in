@@ -2,7 +2,7 @@ numpy
 pandas
 pip-tools
 pytest
-pytest-pep8
+pytest-flake8
 pytest-runner
 twine
 wheel
