@@ -1,7 +1,6 @@
 import re
 import linecache
 import os
-import mimetypes
 import subprocess
 import numpy as np
 import pandas as pd
@@ -196,8 +195,8 @@ def stan_read_csv(filename: str) -> dict:
         shape = tuple(shape_list)
         if len(shape) != 2:
             sampled_pars[par] = np.reshape(
-                    df.tail(num_samples).values[:, ofs:ofs + jump_ahead],
-                    shape, order='F')
+                df.tail(num_samples).values[:, ofs:ofs + jump_ahead],
+                shape, order='F')
         else:
             sampled_pars[par] = \
                 df.tail(num_samples).values[:, ofs:ofs + jump_ahead]
@@ -257,7 +256,7 @@ def _dict_to_rdump(data: dict) -> str:
     for name, value in data.items():
         if isinstance(value, (list, tuple, range, int, float, np.number,
                               np.ndarray, bool)) \
-             and not isinstance(value, str):
+           and not isinstance(value, str):
             value = np.asarray(value)
         else:
             raise ValueError(f'Variable {name} is not a number' +

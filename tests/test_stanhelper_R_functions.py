@@ -2,7 +2,7 @@ import os
 import numpy as np
 
 from unittest import TestCase
-from stanhelper import write_rdump, read_rdump
+from stanhelper.stanhelper import write_rdump, read_rdump
 
 
 class TestRfunctions(TestCase):
