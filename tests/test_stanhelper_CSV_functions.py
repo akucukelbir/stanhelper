@@ -1,8 +1,7 @@
 import os
-import numpy as np
 
 from unittest import TestCase
-from stanhelper import stan_read_csv
+from stanhelper.stanhelper import stan_read_csv
 
 
 class TestCSVfunctions(TestCase):
