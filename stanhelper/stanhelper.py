@@ -12,6 +12,7 @@ from tempfile import NamedTemporaryFile
 def run(stan_binary_path: str,
         input_data: dict,
         method: str,
+        init_data: dict=None,
         method_params: str='',
         output_params: str=''
         ) -> dict:
@@ -53,6 +54,12 @@ def run(stan_binary_path: str,
                 f'output file={output_stan_csv_file.name}'
                 ' '
                 f'{output_params}')
+
+    # process init data (if defined)
+    if init_data:
+        init_data_rdump_file = NamedTemporaryFile()
+        write_rdump(init_data, init_data_rdump_file.name)
+        exec_str += f' init={init_data_rdump_file.name}'
 
     try:
         stan_stdout = subprocess.check_output(exec_str,
