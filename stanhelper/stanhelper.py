@@ -101,6 +101,52 @@ def get_posterior_estimates(stan_output: dict) -> dict:
     return mean_values
 
 
+def get_posterior_summary(stan_output: dict) -> dict:
+    """Calculates a posterior summary of each latent variable.
+
+       If variational: returns the variational mean, std, and 5, 50, 95
+                       percentile
+       If sampling: calculates the empirical posterior mean, std, and
+                    5, 50, 95 percentile
+       If optimize: returns the mode
+    """
+
+    summary = {}
+
+    # variational
+    if ('mean_pars' in stan_output):
+        for parameter in stan_output['mean_pars']:
+            percs = np.percentile(stan_output['sampled_pars'][parameter],
+                                  [5, 50, 95],
+                                  axis=0)
+            summary[parameter] = {
+                'mean': stan_output['mean_pars'][parameter],
+                'std': np.std(stan_output['sampled_pars'][parameter], axis=0),
+                'five_perc': percs[0],
+                'median': percs[1],
+                'ninetyfive_perc': percs[2],
+            }
+    # sampling
+    elif ('accept_stat__' in stan_output):
+        for parameter in stan_output.keys():
+                percs = np.percentile(stan_output[parameter],
+                                      [5, 50, 95],
+                                      axis=0)
+                summary[parameter] = {
+                    'mean': np.mean(stan_output[parameter], axis=0),
+                    'std': np.std(stan_output[parameter], axis=0),
+                    'five_perc': percs[0],
+                    'median': percs[1],
+                    'ninetyfive_perc': percs[2],
+                }
+    # optimize
+    else:
+        for parameter in stan_output.keys():
+            summary[parameter] = stan_output[parameter]
+
+    return summary
+
+
 def stan_read_csv(filename: str) -> dict:
     """Reads and parses the output file (csv) from cmdStan.
 
