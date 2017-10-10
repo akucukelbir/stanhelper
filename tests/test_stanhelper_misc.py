@@ -43,8 +43,8 @@ class TestMisc(TestCase):
 
         input_data = {
             'J': 8,
-            'y': np.array([28,  8, -3,  7, -1,  1, 18, 12]),
-            'sigma': np.array([15, 10, 16, 11,  9, 11, 10, 18])
+            'y': np.array([28, 8, -3, 7, -1, 1, 18, 12]),
+            'sigma': np.array([15, 10, 16, 11, 9, 11, 10, 18])
         }
 
         stan_output = run(FILENAME,
@@ -73,8 +73,8 @@ class TestMisc(TestCase):
 
         input_data = {
             'J': 8,
-            'y': np.array([28,  8, -3,  7, -1,  1, 18, 12]),
-            'sigma': np.array([15, 10, 16, 11,  9, 11, 10, 18])
+            'y': np.array([28, 8, -3, 7, -1, 1, 18, 12]),
+            'sigma': np.array([15, 10, 16, 11, 9, 11, 10, 18])
         }
 
         init_data = {
@@ -110,8 +110,8 @@ class TestMisc(TestCase):
 
         input_data = {
             'J': 8,
-            'y': np.array([28,  8, -3,  7, -1,  1, 18, 12]),
-            # 'sigma': np.array([15, 10, 16, 11,  9, 11, 10, 18])
+            'y': np.array([28, 8, -3, 7, -1, 1, 18, 12]),
+            # 'sigma': np.array([15, 10, 16, 11, 9, 11, 10, 18])
         }
 
         stan_output = run(FILENAME,
