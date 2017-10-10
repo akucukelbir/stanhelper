@@ -104,10 +104,10 @@ def get_posterior_estimates(stan_output: dict) -> dict:
 def get_posterior_summary(stan_output: dict) -> dict:
     """Calculates a posterior summary of each latent variable.
 
-       If variational: returns the variational mean, std, and 5, 50, 95
-                       percentile
+       If variational: returns the variational mean, std, and
+                       5, 25, 50, 75, 95 percentile
        If sampling: calculates the empirical posterior mean, std, and
-                    5, 50, 95 percentile
+                   5, 25, 50, 75, 95 percentile
        If optimize: returns the mode
     """
 
@@ -117,27 +117,31 @@ def get_posterior_summary(stan_output: dict) -> dict:
     if ('mean_pars' in stan_output):
         for parameter in stan_output['mean_pars']:
             percs = np.percentile(stan_output['sampled_pars'][parameter],
-                                  [5, 50, 95],
+                                  [5, 25, 50, 75, 95],
                                   axis=0)
             summary[parameter] = {
                 'mean': stan_output['mean_pars'][parameter],
                 'std': np.std(stan_output['sampled_pars'][parameter], axis=0),
-                'five_perc': percs[0],
-                'median': percs[1],
-                'ninetyfive_perc': percs[2],
+                'p5': percs[0],
+                'p25': percs[1],
+                'p50': percs[2],
+                'p75': percs[3],
+                'p95': percs[4],
             }
     # sampling
     elif ('accept_stat__' in stan_output):
         for parameter in stan_output.keys():
                 percs = np.percentile(stan_output[parameter],
-                                      [5, 50, 95],
+                                      [5, 25, 50, 75, 95],
                                       axis=0)
                 summary[parameter] = {
                     'mean': np.mean(stan_output[parameter], axis=0),
                     'std': np.std(stan_output[parameter], axis=0),
-                    'five_perc': percs[0],
-                    'median': percs[1],
-                    'ninetyfive_perc': percs[2],
+                    'p5': percs[0],
+                    'p25': percs[1],
+                    'p50': percs[2],
+                    'p75': percs[3],
+                    'p95': percs[4],
                 }
     # optimize
     else:

@@ -141,7 +141,7 @@ class TestMisc(TestCase):
         keys = ['lp__', 'accept_stat__', 'stepsize__', 'treedepth__',
                 'n_leapfrog__', 'divergent__', 'energy__', 'mu', 'theta',
                 'tau']
-        subkeys = ['mean', 'std', 'five_perc', 'median', 'ninetyfive_perc']
+        subkeys = ['mean', 'std', 'p5', 'p25', 'p50', 'p75', 'p95']
 
         self.assertListEqual(keys, list(result.keys()))
         for key in keys:
@@ -149,9 +149,11 @@ class TestMisc(TestCase):
 
         assert_allclose(result['mu']['mean'], np.array([8.073827]))
         assert_allclose(result['mu']['std'], np.array([5.25104899]))
-        assert_allclose(result['mu']['five_perc'], np.array([-0.4602165]))
-        assert_allclose(result['mu']['median'], np.array([8.11732]))
-        assert_allclose(result['mu']['ninetyfive_perc'], np.array([16.19353]))
+        assert_allclose(result['mu']['p5'], np.array([-0.4602165]))
+        assert_allclose(result['mu']['p25'], np.array([4.81581]))
+        assert_allclose(result['mu']['p50'], np.array([8.11732]))
+        assert_allclose(result['mu']['p75'], np.array([11.429175]))
+        assert_allclose(result['mu']['p95'], np.array([16.19353]))
 
         assert_allclose(result['theta']['mean'],
                         np.array([12.419558, 7.816183,
@@ -161,15 +163,15 @@ class TestMisc(TestCase):
                         np.array([8.61228728, 6.68721892,
                                   7.91427956, 7.39105258, 6.32559623,
                                   7.03889131, 6.97848441, 8.82055328]))
-        assert_allclose(result['theta']['five_perc'],
+        assert_allclose(result['theta']['p5'],
                         np.array([0.1057379, -2.863044,
                                   -8.5084845, -5.1880425, -5.63355,
                                   -6.229635, 0.9704559, -4.523796]))
-        assert_allclose(result['theta']['median'],
+        assert_allclose(result['theta']['p50'],
                         np.array([11.26905, 7.880545,
                                   6.40003, 7.525235, 5.318285,
                                   6.118715, 10.94805, 8.87839]))
-        assert_allclose(result['theta']['ninetyfive_perc'],
+        assert_allclose(result['theta']['p95'],
                         np.array([28.27765, 19.00013,
                                   17.481145, 19.8772, 14.34689,
                                   16.32348, 24.068015, 23.40457]))
@@ -233,7 +235,7 @@ class TestMisc(TestCase):
 
         result = get_posterior_summary(stan_read_csv(FILENAME))
         keys = ['mu', 'theta', 'tau']
-        subkeys = ['mean', 'std', 'five_perc', 'median', 'ninetyfive_perc']
+        subkeys = ['mean', 'std', 'p5', 'p25', 'p50', 'p75', 'p95']
 
         self.assertListEqual(keys, list(result.keys()))
         for key in keys:
@@ -241,9 +243,11 @@ class TestMisc(TestCase):
 
         assert_allclose(result['mu']['mean'], np.array([1.84578]))
         assert_allclose(result['mu']['std'], np.array([3.574338]))
-        assert_allclose(result['mu']['five_perc'], np.array([-3.888642]))
-        assert_allclose(result['mu']['median'], np.array([1.88189]))
-        assert_allclose(result['mu']['ninetyfive_perc'], np.array([7.662146]))
+        assert_allclose(result['mu']['p5'], np.array([-3.888642]))
+        assert_allclose(result['mu']['p25'], np.array([-0.645503]), rtol=1e-6)
+        assert_allclose(result['mu']['p50'], np.array([1.88189]))
+        assert_allclose(result['mu']['p75'], np.array([4.229085]))
+        assert_allclose(result['mu']['p95'], np.array([7.662146]))
 
         assert_allclose(result['theta']['mean'],
                         np.array([4.64194, 2.73732,
