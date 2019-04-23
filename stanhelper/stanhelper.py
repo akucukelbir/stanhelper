@@ -22,15 +22,8 @@ def run(stan_binary_path: str,
         raise RuntimeError(f'{method} must be either sample, optimize, '
                            'or variational.')
 
-    # check that stan_binary_path is an executable
-    if os.path.isfile(stan_binary_path):
-        mimetype = str(subprocess.check_output(
-            ['file', '-b', '--mime-type', stan_binary_path]).strip(), 'utf-8')
-
-        if mimetype not in ['application/x-executable',
-                            'application/x-mach-binary']:
-            raise RuntimeError(f'{stan_binary_path} is not an executable.')
-    else:
+    # check that stan_binary_path is a file
+    if not os.path.isfile(stan_binary_path):
         raise RuntimeError(f'{stan_binary_path} is not a valid file.')
 
     # save input data to a temporary Rdump file
