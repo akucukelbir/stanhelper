@@ -1,6 +1,6 @@
 from setuptools import setup
 
-__version__ = '1.0.7'
+__version__ = '1.0.8'
 
 
 setup(
@@ -13,7 +13,7 @@ setup(
     url='https://github.com/akucukelbir/stanhelper',
     download_url=('https://github.com/akucukelbir/stanhelper/releases/' +
                   __version__),
-    install_requires=['numpy', 'pandas'],
+    install_requires=['pandas'],
     python_requires='>=3.5',
     license='GPLv3',
     keywords=[],
