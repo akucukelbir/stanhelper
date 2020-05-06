@@ -15,7 +15,7 @@ setup(
                   __version__),
     install_requires=['pandas'],
     python_requires='>=3.5',
-    license='GPLv3',
+    license='MIT',
     keywords=[],
     classifiers=[],
 )
