@@ -23,7 +23,7 @@ def run(stan_binary_path: str,
                            'or variational.')
 
     # check that stan_binary_path is a file
-    if not os.path.isfile(stan_binary_path):
+    if not os.path.isfile(stan_binary_path) or not os.access(stan_binary_path, os.X_OK):
         raise RuntimeError(f'{stan_binary_path} is not a valid file.')
 
     # save input data to a temporary Rdump file
@@ -212,7 +212,7 @@ def stan_read_csv(filename: str) -> dict:
             par_names[entry[0]] = [1]
 
     # get first line of parameters
-    first_line = df.ix[0].values
+    first_line = df.iloc[0].values
     first_line_pars = {}
     ofs = 0
     for par in par_names:
@@ -377,7 +377,7 @@ def read_rdump(filename: str) -> dict:
     contents = open(filename).read().strip()
     names = [name.strip() for name in re.findall(r'^(\w+) <-', contents,
              re.MULTILINE)]
-    values = [value.strip() for value in re.split('\w+ +<-', contents)
+    values = [value.strip() for value in re.split(r'\w+ +<-', contents)
               if value]
     if len(values) != len(names):
         raise ValueError('Unable to pair variable names to values.')

@@ -4,31 +4,58 @@
 #
 #    pip-compile --output-file=requirements.txt requirements.in
 #
-bleach==3.1.5             # via readme-renderer
-certifi==2017.7.27.1      # via requests
-chardet==3.0.4            # via requests
-docutils==0.16            # via readme-renderer
-idna==2.5                 # via requests
-importlib-metadata==1.6.0  # via keyring, twine
-keyring==21.2.1           # via twine
-numpy==1.18.4             # via pandas
-packaging==20.3           # via bleach
-pandas==1.0.3             # via -r requirements.in
-pkginfo==1.5.0.1          # via twine
-pygments==2.6.1           # via readme-renderer
-pyparsing==2.4.7          # via packaging
-python-dateutil==2.6.1    # via pandas
-pytz==2017.2              # via pandas
-readme-renderer==26.0     # via twine
-requests-toolbelt==0.8.0  # via twine
-requests==2.23.0          # via requests-toolbelt, twine
-six==1.10.0               # via bleach, packaging, python-dateutil, readme-renderer
-tqdm==4.15.0              # via twine
-twine==3.1.1              # via -r requirements.in
-urllib3==1.25.9           # via requests
-webencodings==0.5.1       # via bleach
-wheel==0.34.2             # via -r requirements.in
-zipp==3.1.0               # via importlib-metadata
+bleach==3.1.5
+    # via readme-renderer
+certifi==2017.7.27.1
+    # via requests
+chardet==3.0.4
+    # via requests
+docutils==0.16
+    # via readme-renderer
+idna==2.5
+    # via requests
+keyring==21.2.1
+    # via twine
+numpy==1.18.4
+    # via pandas
+packaging==20.3
+    # via bleach
+pandas==1.2.3
+    # via -r requirements.in
+pkginfo==1.5.0.1
+    # via twine
+pygments==2.6.1
+    # via readme-renderer
+pyparsing==2.4.7
+    # via packaging
+python-dateutil==2.8.1
+    # via pandas
+pytz==2021.1
+    # via pandas
+readme-renderer==26.0
+    # via twine
+requests-toolbelt==0.8.0
+    # via twine
+requests==2.23.0
+    # via
+    #   requests-toolbelt
+    #   twine
+six==1.10.0
+    # via
+    #   bleach
+    #   packaging
+    #   python-dateutil
+    #   readme-renderer
+tqdm==4.15.0
+    # via twine
+twine==3.1.1
+    # via -r requirements.in
+urllib3==1.25.9
+    # via requests
+webencodings==0.5.1
+    # via bleach
+wheel==0.34.2
+    # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
