@@ -8,12 +8,20 @@ bleach==3.1.5
     # via readme-renderer
 certifi==2017.7.27.1
     # via requests
+cffi==1.14.5
+    # via cryptography
 chardet==3.0.4
     # via requests
+cryptography==3.4.7
+    # via secretstorage
 docutils==0.16
     # via readme-renderer
 idna==2.5
     # via requests
+jeepney==0.6.0
+    # via
+    #   keyring
+    #   secretstorage
 keyring==21.2.1
     # via twine
 numpy==1.18.4
@@ -24,7 +32,9 @@ pandas==1.2.3
     # via -r requirements.in
 pkginfo==1.5.0.1
     # via twine
-pygments==2.6.1
+pycparser==2.20
+    # via cffi
+pygments==2.7.4
     # via readme-renderer
 pyparsing==2.4.7
     # via packaging
@@ -40,6 +50,8 @@ requests==2.23.0
     # via
     #   requests-toolbelt
     #   twine
+secretstorage==3.3.1
+    # via keyring
 six==1.10.0
     # via
     #   bleach
