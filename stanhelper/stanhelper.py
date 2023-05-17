@@ -312,7 +312,7 @@ def _dict_to_rdump(data: dict) -> str:
             raise ValueError(f'Variable {name} is not a number' +
                              ' and cannot be dumped.')
 
-        if value.dtype == np.bool:
+        if value.dtype == np.bool_:
             value = value.astype(int)
 
         if value.ndim == 0:
